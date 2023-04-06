@@ -1,3 +1,7 @@
+package br.com.bytebank.banco.model;
+
+
+//Full Qualified Name(FQN): br.com.bytebank.model.CalculadorDeImposto
 public class CalculadorDeImposto {
 
     private double totalImposto;

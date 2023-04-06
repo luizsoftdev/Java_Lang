@@ -1,38 +1,47 @@
+package br.com.bytebank.banco.model;
 
-//Conta é uma classe abstrata, não é um objeto "concreto", logo adicionando
-//"abstract", impedimos que ela seja instanciada em outos lugares do código
+/**
+ * Classe que representa uma conta no ByteBank
+ *
+ * @author Luiz Fernando
+ * @version 1.0
+ */
+//Podemos mudar os modificadores de visibilidade da classe, dos construtores e dos métodos também
+
+//private (visível apenas na classe)
+//<<package private>> (visível na classe E em qualquer outro membro do mesmo pacote, podendo ser chamado de default)
+//protected (visível na classe E em qualquer outro membro do mesmo pacote E para qualquer filho)
+//public (visível em qualquer pacote)
 public abstract class Conta {
 
-    //ATRIBUTOS(OU CAMPOS OU PROPRIEDADES)
-    protected double saldo; //é público para os filhos
+    protected double saldo; //protected é visível dentro do pacote e público para os filhos
     private int agencia;
     private int numero;
-    private Cliente titular; //Composição
-
-    //static sinaliza que o atributo é da classe em si
+    private Cliente titular;
     private static int total = 0;
 
-
-    //O java só me dá o construtor padrão se eu não tiver criado nenhum
-    //Construtor padrão, é uma rotina de inicialização, executado apenas quando o objeto é criado
+    /**
+     * Construtor para inicializar o objeto Conta a partir da agencia e numero
+     * @param agencia
+     * @param numero
+     */
     public Conta(int agencia, int numero){
-        //colocamos Conta.total pois total é um atributo da classe
         Conta.total++;
-
-        //System.out.println("O total de contas é " + total);
         this.agencia = agencia;
         this.numero = numero;
-        //this.saldo = 100;
-        //System.out.println("Estou criando uma conta " + this.getAgencia());
     }
 
     public abstract void deposita(double valor);
 
+    /**
+     * Valor precisa ser menor ou igual ao saldo
+     * @param valor
+     * @throws SaldoInsuficienteException
+     */
     public void saca(double valor) throws SaldoInsuficienteException{
         if (this.saldo < valor) {
             throw new SaldoInsuficienteException("Saldo: " + this.saldo + ", Valor: " + valor);
         }
-
         this.saldo -= valor;
     }
 
@@ -41,8 +50,6 @@ public abstract class Conta {
         destino.deposita(valor);
     }
 
-    //Não é necessário ter um setSaldo() pois já temos funções
-    //que deixam desnecessário criar um setter para saldo
     public double getSaldo(){
         return this.saldo;
     }
@@ -78,10 +85,12 @@ public abstract class Conta {
         this.titular = titular;
     }
 
-    //é um método estático pois é um método geral da classe
-    //lembrando que não pode usar "this" dentro de um método estático
-    //nem nada que referencie this
     public static int getTotal() {
         return Conta.total;
+    }
+
+    @Override
+    public String toString() {
+        return "Numero: " + this.getNumero() + ", Agencia:" + this.getAgencia();
     }
 }
